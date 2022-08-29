@@ -26,11 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**", "/api/login/*").permitAll()
                 .antMatchers("/h2/**", "/h2/*", "/h2-console/**", "/h2-console/*").permitAll()
                 .antMatchers("/product/**").permitAll()
+                .antMatchers("/shop/**").permitAll()
+                .antMatchers("/account/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin();
+                .authenticated();
+
 
         //For h2 console
         httpSecurity.csrf().disable();

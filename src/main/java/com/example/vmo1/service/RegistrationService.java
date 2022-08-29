@@ -10,11 +10,9 @@ import com.example.vmo1.model.request.SignupRequest;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.repository.AccountRepository;
 import com.example.vmo1.repository.RoleRepository;
-import com.example.vmo1.security.PasswordEncoder;
 import com.example.vmo1.validation.validator.EmailValidator;
 import com.example.vmo1.security.token.ConfirmationToken;
 import com.example.vmo1.security.token.ConfirmationTokenService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,10 +38,6 @@ public class RegistrationService {
     @Autowired
     private EmailSender emailSender;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private PasswordResetTokenService passwordResetTokenService;
 
 
     public MessageResponse register(SignupRequest request) {

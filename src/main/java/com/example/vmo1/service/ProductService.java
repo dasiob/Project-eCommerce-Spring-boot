@@ -82,9 +82,9 @@ public class ProductService {
     public ProductDto updateProduct(ProductDto productDto, long id, MultipartFile[] files) {
         Product product = productRepository.findById(id).orElse(null);
 
-        List<Image> lstImg = product.getLstImg();
-        System.out.println(lstImg);
-        imageRepository.deleteAll(lstImg);
+        List<Image> lstImg = new ArrayList<>();
+
+        imageRepository.deleteImagesByProduct(product.getId());
         for (MultipartFile file : files) {
 
             try {
@@ -144,12 +144,5 @@ public class ProductService {
         return productResponse;
     }
 
-//    private ProductDto mapToDto(Product product){
-//        return  MapperUtil.map(product, ProductDto.class)
-//    }
-//
-//    private Product mapToEntity(ProductDto productDto){
-//        return MapperUtil.map(productDto, Product.class);
-//    }
 }
 
