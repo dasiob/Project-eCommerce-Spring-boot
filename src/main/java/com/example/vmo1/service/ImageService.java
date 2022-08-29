@@ -23,22 +23,6 @@ public class ImageService {
         return imageRepository.saveAll(image);
     }
 
-//    public String upload(MultipartFile file, String path) throws IOException {
-//        String name = file.getOriginalFilename();
-//
-//        // random name generate file
-//        String randomID = UUID.randomUUID().toString();
-//        String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-//        String filePath = path + File.separator + filename1;
-//
-//        File f = new File(path);
-//        if(!f.exists()){
-//            f.mkdir();
-//        }
-//
-//        Files.copy(file.getInputStream(), Paths.get(filePath));
-//        return name;
-//    }
 
     public InputStream getResource(String path, String filename) throws FileNotFoundException {
         String fullPath = path + File.separator + filename;
