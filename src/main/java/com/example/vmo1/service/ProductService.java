@@ -81,9 +81,7 @@ public class ProductService {
 
     public ProductDto updateProduct(ProductDto productDto, long id, MultipartFile[] files) {
         Product product = productRepository.findById(id).orElse(null);
-
         List<Image> lstImg = new ArrayList<>();
-
         imageRepository.deleteImagesByProduct(product.getId());
         for (MultipartFile file : files) {
 

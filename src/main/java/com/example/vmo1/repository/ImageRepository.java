@@ -12,5 +12,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     @Transactional
     @Modifying
     @Query("DELETE FROM Image i WHERE i.product.id = ?1")
-    public void deleteImagesByProduct(long product_id);
+    void deleteImagesByProduct(long product_id);
 }
