@@ -1,7 +1,7 @@
 package com.example.vmo1.controller;
 
 import com.example.vmo1.model.request.ShopDto;
-import com.example.vmo1.service.ShopService;
+import com.example.vmo1.service.impl.ShopServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequestMapping("/shop")
 public class ShopController {
     @Autowired
-    private ShopService shopService;
+    private ShopServiceImpl shopService;
     @PostMapping("/add")
     public ResponseEntity<?> save(@RequestPart ShopDto shopDto,@RequestPart("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(shopService.save(shopDto, file));

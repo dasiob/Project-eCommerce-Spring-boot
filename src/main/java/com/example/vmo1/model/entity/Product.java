@@ -40,6 +40,9 @@ public class Product {
     @Column(name = "updated_at")
     private Date updated_at;
 
+    @Column(name = "is_deleted")
+    private boolean is_deleted;
+
     @OneToMany(mappedBy = "product", cascade= {CascadeType.ALL})
     private List<Image> lstImg;
 

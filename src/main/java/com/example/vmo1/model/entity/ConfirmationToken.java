@@ -1,4 +1,4 @@
-package com.example.vmo1.security.token;
+package com.example.vmo1.model.entity;
 
 import com.example.vmo1.model.entity.Account;
 import lombok.Getter;
@@ -15,16 +15,13 @@ public class ConfirmationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String token;
-
     @Column(nullable = false)
     private LocalDateTime createdAt;
-
     @Column(nullable = false)
     private LocalDateTime expiresAt;
-
+    @Column
     private LocalDateTime confirmedAt;
 
     @ManyToOne

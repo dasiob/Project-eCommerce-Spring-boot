@@ -1,8 +1,11 @@
 package com.example.vmo1.model.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "shop")
@@ -20,6 +23,14 @@ public class Shop {
 
     @Column(name = "banner")
     private String banner;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updated_at;
 
     @OneToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "account_id")

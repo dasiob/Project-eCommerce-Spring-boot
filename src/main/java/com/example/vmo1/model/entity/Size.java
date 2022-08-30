@@ -28,14 +28,4 @@ public class Size {
     @Column(name = "status")
     private boolean status;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private Date created_at;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updated_at;
-
-    @Column(name = "is_deleted")
-    private boolean is_deleted;
 }

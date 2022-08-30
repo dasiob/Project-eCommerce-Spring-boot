@@ -1,5 +1,6 @@
-package com.example.vmo1.security.token;
+package com.example.vmo1.repository;
 
+import com.example.vmo1.model.entity.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

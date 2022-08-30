@@ -7,9 +7,9 @@ import com.example.vmo1.model.request.SignupRequest;
 import com.example.vmo1.model.response.JWTAuthResponse;
 import com.example.vmo1.repository.AccountRepository;
 import com.example.vmo1.security.jwt.JwtTokenProvider;
-import com.example.vmo1.service.AccountService;
-import com.example.vmo1.service.ForgotPasswordService;
-import com.example.vmo1.service.RegistrationService;
+import com.example.vmo1.service.impl.AccountServiceImpl;
+import com.example.vmo1.service.impl.ForgotPasswordServiceImpl;
+import com.example.vmo1.service.impl.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class AuthController {
     @Autowired
-    private RegistrationService registrationService;
+    private RegistrationServiceImpl registrationService;
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
@@ -33,9 +33,9 @@ public class AuthController {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    AccountService accountService;
+    AccountServiceImpl accountService;
     @Autowired
-    private ForgotPasswordService forgotPasswordService;
+    private ForgotPasswordServiceImpl forgotPasswordService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

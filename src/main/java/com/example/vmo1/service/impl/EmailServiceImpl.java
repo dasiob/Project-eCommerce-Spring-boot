@@ -1,5 +1,6 @@
-package com.example.vmo1.email;
+package com.example.vmo1.service.impl;
 
+import com.example.vmo1.service.EmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
-public class EmailService implements EmailSender {
+public class EmailServiceImpl implements EmailSender {
     @Autowired
     private JavaMailSender mailSender;
-    private final static Logger logger = LoggerFactory.getLogger(EmailService.class);
+    private final static Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Override
     @Async
