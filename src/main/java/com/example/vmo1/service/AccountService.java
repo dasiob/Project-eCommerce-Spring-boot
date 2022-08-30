@@ -1,17 +1,20 @@
 package com.example.vmo1.service;
 
 
+import com.example.vmo1.commons.configs.MapperUtil;
 import com.example.vmo1.email.EmailSender;
 import com.example.vmo1.model.entity.Account;
 import com.example.vmo1.model.entity.Role;
-import com.example.vmo1.model.request.UpdatePasswordRequest;
-import com.example.vmo1.model.response.MessageResponse;
+import com.example.vmo1.model.request.AccountDto;
+import com.example.vmo1.model.response.AccountResponse;
 import com.example.vmo1.repository.AccountRepository;
 import com.example.vmo1.repository.RoleRepository;
-import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.security.token.ConfirmationToken;
 import com.example.vmo1.security.token.ConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,10 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -106,5 +107,29 @@ public class AccountService implements UserDetailsService {
 //    }
 
 
+    public AccountResponse getAllAccount(int pageNo,int pageSize){
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Account> accounts = accountRepository.findAll(pageable);
 
+        List<Account> accountList = accounts.getContent();
+        List<AccountDto> content = accountList.stream().map(account -> MapperUtil.map(account, AccountDto.class)).collect(Collectors.toList());
+
+        AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setContent(content);
+        accountResponse.setPageNo(accounts.getNumber());
+        accountResponse.setPageSize(accounts.getSize());
+        accountResponse.setTotalElements(accounts.getTotalElements());
+        accountResponse.setTotalPages(accounts.getTotalPages());
+        accountResponse.setLast(accounts.isLast());
+
+        return accountResponse;
+    }
+
+    public AccountDto updateProfile(AccountDto accountDto, long id){
+        Account account = accountRepository.findById(id).get();
+        account.setFullname(accountDto.getFullname());
+        account.setPhone(account.getPhone());
+        accountRepository.save(account);
+        return MapperUtil.map(account, AccountDto.class);
+    }
 }

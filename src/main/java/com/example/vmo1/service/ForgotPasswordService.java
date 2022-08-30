@@ -7,9 +7,10 @@ import com.example.vmo1.model.request.PasswordResetLinkRequest;
 import com.example.vmo1.model.request.PasswordResetRequest;
 import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.repository.AccountRepository;
-import com.example.vmo1.security.PasswordEncoder;
+import com.example.vmo1.repository.PasswordResetTokenRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,8 @@ public class ForgotPasswordService {
     @Autowired
     private PasswordResetTokenService passwordResetTokenService;
     @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+    @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private EmailSender emailSender;
@@ -29,7 +32,7 @@ public class ForgotPasswordService {
     private PasswordEncoder passwordEncoder;
     @Transactional
     public String confirmTokenResetPassword(String token) {
-        Optional<PasswordResetToken> passwordResetToken = passwordResetTokenService.getToken(token);
+        Optional<PasswordResetToken> passwordResetToken = passwordResetTokenRepository.findByToken(token);
 
         if (passwordResetToken.get().getConfirmedAt() != null) {
             throw new IllegalStateException("Email is already confirmed");
@@ -41,7 +44,7 @@ public class ForgotPasswordService {
             throw new IllegalStateException("Token is already expired!");
         }
 
-        passwordResetTokenService.setConfirmedAt(token);
+        passwordResetTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
 
         //Returning confirmation message if the token matches
         return "Your email is confirmed. Please input new password to reset password!!!";
@@ -78,7 +81,7 @@ public class ForgotPasswordService {
 
     public boolean updatePassword(String email, String password){
         Account account = accountRepository.findByEmail(email).get();
-        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(account.getPassword());
+        String encodedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encodedPassword);
         accountRepository.save(account);
         return true;
@@ -86,7 +89,7 @@ public class ForgotPasswordService {
 
     private void saveConfirmationToken(Account account, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(token, LocalDateTime.now().plusMinutes(15), true,account);
-        passwordResetTokenService.save(passwordResetToken);
+        passwordResetTokenRepository.save(passwordResetToken);
     }
 
     public String buildEmail(String name, String link) {

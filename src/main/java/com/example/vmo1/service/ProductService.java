@@ -120,11 +120,10 @@ public class ProductService {
         return MapperUtil.map(updateProduct, ProductDto.class);
     }
 
-    public ProductResponse getAllProduct(int pageNo, int pageSize, String sortBy, String sortDir){
+    public ProductResponse getAllProduct(int pageNo, int pageSize){
 
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         Page<Product> products = productRepository.findAll(pageable);
 

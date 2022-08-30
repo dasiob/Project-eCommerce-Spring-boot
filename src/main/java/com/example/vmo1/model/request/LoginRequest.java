@@ -13,8 +13,6 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
 
     private String usernameOrEmail;
-
-
     private String password;
 
 

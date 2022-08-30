@@ -14,9 +14,9 @@ public class AccountDto {
     @Id
     private Long id;
     private String username;
+    private String fullname;
     private String email;
     private String password;
-//    private List<RoleDto> roles;
     private Date create_at;
     private Date updated_at;
 }

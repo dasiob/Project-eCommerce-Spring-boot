@@ -1,15 +1,19 @@
 package com.example.vmo1.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.vmo1.model.request.AccountDto;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class AccountResponse {
-
+    private List<AccountDto> content;
+    private int pageNo;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
+    private boolean last;
 
 }
