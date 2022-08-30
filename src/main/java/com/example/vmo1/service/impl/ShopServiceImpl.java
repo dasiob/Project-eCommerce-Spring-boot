@@ -24,23 +24,28 @@ public class ShopServiceImpl implements ShopService {
     @Value("${project.image}")
     private String path;
     @Override
-    public ShopDto save(ShopDto shopDto, MultipartFile file) throws IOException {
+    public ShopDto save(ShopDto shopDto, MultipartFile file) {
         Shop shop = MapperUtil.map(shopDto, Shop.class);
-        String name = file.getOriginalFilename();
+        try {
+            String name = file.getOriginalFilename();
 
-        // random name generate file
-        String randomID = UUID.randomUUID().toString();
-        String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-        String filePath = path + File.separator + filename1;
+            // random name generate file
+            String randomID = UUID.randomUUID().toString();
+            String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
+            String filePath = path + File.separator + filename1;
 
-        File f = new File(path);
-        if(!f.exists()){
-            f.mkdir();
+            File f = new File(path);
+            if (!f.exists()) {
+                f.mkdir();
+            }
+            Files.copy(file.getInputStream(), Paths.get(filePath));
+            // save image to field banner in shop
+            shop.setBanner(name);
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
 
-        Files.copy(file.getInputStream(), Paths.get(filePath));
-
-        shop.setBanner(name);
         shopRepository.save(shop);
         return MapperUtil.map(shop, ShopDto.class);
     }

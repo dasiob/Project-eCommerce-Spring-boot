@@ -22,13 +22,8 @@ import java.util.*;
 public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private AccountServiceImpl accountService;
-
     @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
+    private AccountRepository accountRepository;
     @Autowired
     private EmailValidator emailValidator;
     @Autowired

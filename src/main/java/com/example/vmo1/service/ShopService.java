@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface ShopService {
-    ShopDto save(ShopDto shopDto, MultipartFile file) throws IOException;
+    ShopDto save(ShopDto shopDto, MultipartFile file);
 }
