@@ -1,7 +1,7 @@
 package com.example.vmo1.service.impl;
 
-import com.example.vmo1.commons.exeptions.InvalidTokenRequestException;
-import com.example.vmo1.commons.exeptions.ResourceNotFoundException;
+import com.example.vmo1.commons.exceptions.InvalidTokenRequestException;
+import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.PasswordResetToken;
 import com.example.vmo1.model.request.PasswordResetRequest;
 import com.example.vmo1.repository.PasswordResetTokenRepository;

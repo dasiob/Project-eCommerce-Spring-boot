@@ -1,5 +1,6 @@
 package com.example.vmo1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public class Product {
     private Date updated_at;
 
     @Column(name = "is_deleted")
-    private boolean is_deleted;
+    private Boolean is_deleted;
 
     @OneToMany(mappedBy = "product", cascade= {CascadeType.ALL})
     private List<Image> lstImg;
@@ -61,4 +62,9 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "size_id"))
     private Set<Size> sizes = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
+    private Shop shop;
 }

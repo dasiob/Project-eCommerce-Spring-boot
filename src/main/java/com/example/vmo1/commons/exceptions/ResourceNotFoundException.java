@@ -1,4 +1,4 @@
-package com.example.vmo1.commons.exeptions;
+package com.example.vmo1.commons.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

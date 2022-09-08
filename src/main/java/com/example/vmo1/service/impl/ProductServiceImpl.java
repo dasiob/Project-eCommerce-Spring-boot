@@ -1,7 +1,7 @@
 package com.example.vmo1.service.impl;
 
 import com.example.vmo1.commons.configs.MapperUtil;
-import com.example.vmo1.commons.exeptions.ResourceNotFoundException;
+import com.example.vmo1.commons.exceptions.ResourceNotFoundException;
 import com.example.vmo1.model.entity.Image;
 import com.example.vmo1.model.entity.Product;
 import com.example.vmo1.model.request.ProductDto;
@@ -81,8 +81,9 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public ProductDto updateProduct(ProductDto productDto, long id, MultipartFile[] files) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id));
+        Product product = MapperUtil.map(productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id)), Product.class);
+
         List<Image> lstImg = new ArrayList<>();
         imageRepository.deleteImagesByProduct(product.getId());
         for (MultipartFile file : files) {
@@ -111,20 +112,19 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         imageRepository.saveAll(lstImg);
+        product.setLstImg(lstImg);
 
-        product.setId(productDto.getId());
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setQuantity(productDto.getQuantity());
-        product.setCategory(productDto.getCategory());
+//        product.setId(productDto.getId());
+//        product.setName(productDto.getName());
+//        product.setPrice(productDto.getPrice());
+//        product.setQuantity(productDto.getQuantity());
+//        product.setCategory(productDto.getCategory());
 
         Product updateProduct = productRepository.save(product);
         return MapperUtil.map(updateProduct, ProductDto.class);
     }
     @Override
     public ProductResponse getAllProduct(int pageNo, int pageSize){
-
-
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         Page<Product> products = productRepository.findAll(pageable);
@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(long id){
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id));
-        product.set_deleted(true);
+        product.setIs_deleted(true);
         productRepository.save(product);
     }
 

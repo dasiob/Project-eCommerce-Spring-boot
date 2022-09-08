@@ -33,7 +33,7 @@ public class Role {
     private Date updated_at;
 
     @Column(name = "is_deleted")
-    private boolean is_deleted;
+    private Boolean is_deleted;
 
 
 }

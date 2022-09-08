@@ -1,4 +1,4 @@
-package com.example.vmo1.commons.exeptions;
+package com.example.vmo1.commons.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,11 +1,10 @@
-package com.example.vmo1.commons.exeptions;
+package com.example.vmo1.commons.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 public class InvalidTokenRequestException extends RuntimeException {
-
     private final String tokenType;
     private final String token;
     private final String message;

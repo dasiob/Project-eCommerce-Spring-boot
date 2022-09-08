@@ -19,8 +19,7 @@ public class JwtTokenProvider {
     // generate token
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
+        Date expireDate = new Date(new Date().getTime() + jwtExpirationInMs);
 
         String token = Jwts.builder()
                 .setSubject(username)

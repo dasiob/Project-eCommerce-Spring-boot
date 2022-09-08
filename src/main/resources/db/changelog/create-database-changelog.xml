@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1662537496066-1" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="account"/>
+            </not>
+        </preConditions>
+        <createTable tableName="account">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="enable" type="BOOLEAN"/>
+            <column name="locked" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-2" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="account_role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="account_role">
+            <column name="account_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account_role"/>
+            </column>
+            <column name="role_id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account_role"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-3" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="category"/>
+            </not>
+        </preConditions>
+        <createTable tableName="category">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_category"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="status" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-4" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="color"/>
+            </not>
+        </preConditions>
+        <createTable tableName="color">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_color"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="status" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-5" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="confirmation_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="confirmation_token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_confirmationtoken"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmed_at" type="DATETIME"/>
+            <column name="account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-6" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="image"/>
+            </not>
+        </preConditions>
+        <createTable tableName="image">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_image"/>
+            </column>
+            <column name="file_name" type="VARCHAR(255)"/>
+            <column name="product_id" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-7" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="password_reset_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="password_reset_token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_password_reset_token"/>
+            </column>
+            <column name="token" type="VARCHAR(255)"/>
+            <column name="expires_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmed_at" type="DATETIME"/>
+            <column name="active" type="BOOLEAN"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-8" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="category_id" type="BIGINT"/>
+            <column name="shop_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-9" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_color"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product_color">
+            <column name="color_id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product_color"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product_color"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-10" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_size"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product_size">
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product_size"/>
+            </column>
+            <column name="size_id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product_size"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-11" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-12" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="shop"/>
+            </not>
+        </preConditions>
+        <createTable tableName="shop">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shop"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="banner" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-13" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="size"/>
+            </not>
+        </preConditions>
+        <createTable tableName="size">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_size"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="status" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1662537496066-14" author="admin">
+        <addUniqueConstraint columnNames="email" constraintName="uc_72c8b62cc63aa647776639d41" tableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-15" author="admin">
+        <addUniqueConstraint columnNames="username" constraintName="uc_d601a0e5f9319ffa96e5be6bd" tableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-16" author="admin">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="confirmation_token"
+                                 constraintName="FK_CONFIRMATIONTOKEN_ON_ACCOUNT" referencedColumnNames="id"
+                                 referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-17" author="admin">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="image" constraintName="FK_IMAGE_ON_PRODUCT"
+                                 referencedColumnNames="id" referencedTableName="product"/>
+    </changeSet>
+    <changeSet id="1662537496066-18" author="admin">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="password_reset_token"
+                                 constraintName="FK_PASSWORD_RESET_TOKEN_ON_ACCOUNT" referencedColumnNames="id"
+                                 referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-19" author="admin">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product"
+                                 constraintName="FK_PRODUCT_ON_CATEGORY" referencedColumnNames="id"
+                                 referencedTableName="category"/>
+    </changeSet>
+    <changeSet id="1662537496066-20" author="admin">
+        <addForeignKeyConstraint baseColumnNames="shop_id" baseTableName="product" constraintName="FK_PRODUCT_ON_SHOP"
+                                 referencedColumnNames="id" referencedTableName="shop"/>
+    </changeSet>
+    <changeSet id="1662537496066-21" author="admin">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="shop" constraintName="FK_SHOP_ON_ACCOUNT"
+                                 referencedColumnNames="id" referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-22" author="admin">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="account_role"
+                                 constraintName="fk_accrol_on_account" referencedColumnNames="id"
+                                 referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1662537496066-23" author="admin">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="account_role"
+                                 constraintName="fk_accrol_on_role" referencedColumnNames="id"
+                                 referencedTableName="role"/>
+    </changeSet>
+    <changeSet id="1662537496066-24" author="admin">
+        <addForeignKeyConstraint baseColumnNames="color_id" baseTableName="product_color"
+                                 constraintName="fk_procol_on_color" referencedColumnNames="id"
+                                 referencedTableName="color"/>
+    </changeSet>
+    <changeSet id="1662537496066-25" author="admin">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_color"
+                                 constraintName="fk_procol_on_product" referencedColumnNames="id"
+                                 referencedTableName="product"/>
+    </changeSet>
+    <changeSet id="1662537496066-26" author="admin">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_size"
+                                 constraintName="fk_prosiz_on_product" referencedColumnNames="id"
+                                 referencedTableName="product"/>
+    </changeSet>
+    <changeSet id="1662537496066-27" author="admin">
+        <addForeignKeyConstraint baseColumnNames="size_id" baseTableName="product_size"
+                                 constraintName="fk_prosiz_on_size" referencedColumnNames="id"
+                                 referencedTableName="size"/>
+    </changeSet>
+
+</databaseChangeLog>

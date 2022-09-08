@@ -2,6 +2,7 @@ package com.example.vmo1.model.request;
 
 import com.example.vmo1.model.entity.Category;
 import com.example.vmo1.model.entity.Image;
+import com.example.vmo1.model.entity.Shop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,5 @@ public class ProductDto {
     private int quantity;
     private Category category;
     private List<Image> lstImg;
+    private Shop shop;
 }

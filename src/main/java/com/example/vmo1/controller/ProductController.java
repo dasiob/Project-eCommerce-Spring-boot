@@ -1,10 +1,11 @@
 package com.example.vmo1.controller;
 
 import com.example.vmo1.model.request.ProductDto;
+import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ProductResponse;
 import com.example.vmo1.repository.ImageRepository;
-import com.example.vmo1.service.impl.ImageServiceImpl;
-import com.example.vmo1.service.impl.ProductServiceImpl;
+import com.example.vmo1.service.ImageService;
+import com.example.vmo1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/v1/product")
 public class ProductController {
     @Autowired
-    ImageServiceImpl imageService;
+    ImageService imageService;
     @Autowired
     ImageRepository imageRepository;
     @Autowired
-    ProductServiceImpl productService;
+    ProductService productService;
     @Value("${project.image}")
     private String path;
 
@@ -49,16 +50,16 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ProductResponse getAllProducts(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                                           @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize){
             return productService.getAllProduct(pageNo, pageSize);
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteProduct(@PathVariable("id") long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") long id){
         productService.deleteProduct(id);
-        return ResponseEntity.ok("Product have been delete!!!");
+        return ResponseEntity.ok(new MessageResponse("Product have been delete!!!"));
     }
 
     //    @PostMapping("/upload")

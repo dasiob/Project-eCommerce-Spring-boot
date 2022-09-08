@@ -28,15 +28,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-
         httpSecurity.cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/swagger*/**", "/webjars/**", "/swagger-resources/**", "/v2/**", "springfox.js**", "/product/**").permitAll()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests()
+                .antMatchers("/api/v1/admin/**").permitAll()
+                .antMatchers("/api/v1/product/add/*", "/api/v1/product/images/*", "/api/v1/product/update/*", "/api/v1/product/delete/*").permitAll()
 
-//        httpSecurity.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/api/v1/auth/**").permitAll()
+                .antMatchers("/api/v1/product/**", "/api/v1/shop/**", "/api/v2/**").permitAll()
+                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v2/**").permitAll()
+                .anyRequest().authenticated();
+
+
+
+        httpSecurity.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 
@@ -57,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
         return super.authenticationManagerBean();
     }
     @Bean
-
     public JwtAuthenticationFilter authenticationJwtTokenFilter(){
         return new JwtAuthenticationFilter();
     }
