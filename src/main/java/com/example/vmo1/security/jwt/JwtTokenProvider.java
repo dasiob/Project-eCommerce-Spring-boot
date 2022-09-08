@@ -29,6 +29,12 @@ public class JwtTokenProvider {
         return token;
     }
 
+    public String generateTokenFromUsername(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationInMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
     // get username from token
     public String getUsernameFromJWT(String token){
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();

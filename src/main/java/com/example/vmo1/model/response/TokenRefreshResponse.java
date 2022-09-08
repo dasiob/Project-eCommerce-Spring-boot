@@ -1,16 +1,14 @@
 package com.example.vmo1.model.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class JWTAuthResponse {
+@Data
+public class TokenRefreshResponse {
     private String accessToken;
     private String refreshToken;
     private String tokenType = "Bearer";
 
-    public JWTAuthResponse(String accessToken, String refreshToken) {
+    public TokenRefreshResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

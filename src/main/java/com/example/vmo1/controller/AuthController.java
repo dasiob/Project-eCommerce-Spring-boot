@@ -1,12 +1,17 @@
 package com.example.vmo1.controller;
 
+import com.example.vmo1.model.entity.Account;
+import com.example.vmo1.model.entity.RefreshToken;
 import com.example.vmo1.model.request.*;
 import com.example.vmo1.model.response.AccountInforResponse;
 import com.example.vmo1.model.response.JWTAuthResponse;
+import com.example.vmo1.model.response.TokenRefreshResponse;
 import com.example.vmo1.repository.AccountRepository;
 import com.example.vmo1.security.jwt.JwtTokenProvider;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
+import com.example.vmo1.service.ForgotPasswordService;
+import com.example.vmo1.service.RefeshTokenService;
 import com.example.vmo1.service.RegistrationService;
 import com.example.vmo1.service.impl.ForgotPasswordServiceImpl;
 import com.example.vmo1.validation.annotation.CurrentUser;
@@ -27,15 +32,17 @@ public class AuthController {
     @Autowired
     private RegistrationService registrationService;
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
-    JwtTokenProvider tokenProvider;
+    private JwtTokenProvider tokenProvider;
     @Autowired
-    AccountRepository accountRepository;
+   private AccountRepository accountRepository;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    private ForgotPasswordServiceImpl forgotPasswordService;
+    private ForgotPasswordService forgotPasswordService;
+    @Autowired
+    private RefeshTokenService refeshTokenService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -44,8 +51,19 @@ public class AuthController {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        RefreshToken refreshToken = refeshTokenService.createRefreshToken(customUserDetails.getId());
         String token = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JWTAuthResponse(token));
+        return ResponseEntity.ok(new JWTAuthResponse(token, refreshToken.getToken()));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request){
+        String requestRefreshToken = request.getRefeshToken();
+        RefreshToken refreshToken = refeshTokenService.findByToken(requestRefreshToken).get();
+        refeshTokenService.verifyExpiration(refreshToken);
+
+        String token = tokenProvider.generateTokenFromUsername(refreshToken.getAccount().getUsername());
+        return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
 
     }
 
