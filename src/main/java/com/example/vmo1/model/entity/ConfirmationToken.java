@@ -3,9 +3,12 @@ package com.example.vmo1.model.entity;
 import com.example.vmo1.model.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -17,8 +20,14 @@ public class ConfirmationToken {
     private Long id;
     @Column(nullable = false)
     private String token;
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updated_at;
     @Column(nullable = false)
     private LocalDateTime expiresAt;
     @Column
@@ -32,9 +41,8 @@ public class ConfirmationToken {
     public ConfirmationToken() {
     }
 
-    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, Account account) {
+    public ConfirmationToken(String token, LocalDateTime expiresAt, Account account) {
         this.token = token;
-        this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.account = account;
     }

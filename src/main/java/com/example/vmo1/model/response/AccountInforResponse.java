@@ -19,5 +19,5 @@ public class AccountInforResponse {
     private String phone;
     private Boolean enable;
     private Date created_at;
-    private Date update_at;
+    private Date updated_at;
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 public class ConfirmationTokenServiceImpl implements ConfirmTokenService {
 
     @Autowired
-    ConfirmationTokenRepository confirmationTokenRepository;
+    private ConfirmationTokenRepository confirmationTokenRepository;
     @Override
     public void saveConfirmationToken(ConfirmationToken token) {
         confirmationTokenRepository.save(token);

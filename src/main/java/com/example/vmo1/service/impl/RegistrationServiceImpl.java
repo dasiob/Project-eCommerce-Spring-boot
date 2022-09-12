@@ -12,6 +12,7 @@ import com.example.vmo1.service.EmailSender;
 import com.example.vmo1.service.RegistrationService;
 import com.example.vmo1.model.entity.ConfirmationToken;
 import com.example.vmo1.validation.validator.EmailValidator;
+import com.example.vmo1.validation.validator.PhoneValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private EmailValidator emailValidator;
     @Autowired
+    private PhoneValidator phoneValidator;
+    @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private EmailSender emailSender;
@@ -34,39 +37,54 @@ public class RegistrationServiceImpl implements RegistrationService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
     @Override
     public MessageResponse register(SignupRequest request) {
 //        Account account = accountRepository.findByUsername(request.getUsername()).orElse(null);
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
-        if(emailExists || usernameExists){
+        if (emailExists || usernameExists) {
             return new MessageResponse("Fail: username or email already use");
         }
-            boolean isValidEmail = emailValidator.test(request.getEmail());
-            if (isValidEmail) {
-                Account accountRegister = new Account();
-                accountRegister.setUsername(request.getUsername());
-                accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
-                accountRegister.setEmail(request.getEmail());
-                accountRegister.setEnable(false);
-
-                Set<Role> roles = new HashSet<>();
-                roles.add(roleRepository.findByName("ROLE_USER").get());
-                accountRegister.setRoles(roles);
-                accountRepository.save(accountRegister);
-
-                String tokenForNewAccount = UUID.randomUUID().toString();
-                saveConfirmationToken(accountRegister, tokenForNewAccount);
-                //Since, we are running the spring boot application in localhost, we are hardcoding the
-                //url of the server. We are creating a POST request with token param
-                String link = "http://localhost:8082/api/v1/auth/registration/confirm?token=" + tokenForNewAccount;
-                emailSender.sendEmail(request.getEmail(), buildEmail(request.getUsername(), link));
-                return new MessageResponse("Success: Token send successfully!");
-            } else {
-                throw new IllegalStateException(String.format("Email %s, not valid", request.getEmail()));
+        boolean isValidEmail = emailValidator.test(request.getEmail());
+        if (isValidEmail) {
+            Account accountRegister = new Account();
+            if (request.getPhone() != null) {
+                boolean isValidPhone = phoneValidator.test(request.getPhone());
+                if (!isValidPhone) {
+                    return new MessageResponse("Phone number is not valid");
+                } else {
+                    accountRegister.setPhone(request.getPhone());
+                }
             }
 
+            accountRegister.setFullname(request.getFullname());
+            accountRegister.setUsername(request.getUsername());
+            accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
+            accountRegister.setEmail(request.getEmail());
+            accountRegister.setEnable(false);
+
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleRepository.findByName("ROLE_USER").get());
+            accountRegister.setRoles(roles);
+            accountRepository.save(accountRegister);
+
+            String tokenForNewAccount = UUID.randomUUID().toString();
+            saveConfirmationToken(accountRegister, tokenForNewAccount);
+            //Since, we are running the spring boot application in localhost, we are hardcoding the
+            //url of the server. We are creating a POST request with token param
+            String link = "http://localhost:8082/api/v1/auth/registration/confirm?token=" + tokenForNewAccount;
+            boolean isSuccess = emailSender.sendEmail(request.getEmail(), buildEmail(request.getUsername(), link));
+            if(isSuccess){
+                return new MessageResponse("Success: Token send successfully!");
+            } else {
+                return new MessageResponse("Fail: Can not send email");
+            }
+        } else {
+            throw new IllegalStateException(String.format("Email %s, not valid", request.getEmail()));
+        }
     }
+
     @Override
     @Transactional
     public String confirmToken(String token) {
@@ -90,13 +108,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void saveConfirmationToken(Account account, String token) {
-        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15), account);
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now().plusMinutes(15), account);
         confirmationTokenRepository.save(confirmationToken);
     }
 
     @Override
-    public String buildEmail(String name, String link){
+    public String buildEmail(String name, String link) {
         return "<div style=\"display: none; font-size: 1px; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;\">\n" +
                 "    &nbsp;\n" +
                 "</div>\n" +

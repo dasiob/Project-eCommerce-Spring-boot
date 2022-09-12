@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -12,6 +13,11 @@ import javax.persistence.Id;
 public class UpdateAccountByAdminRequest {
     @Id
     private Long id;
+    private String fullname;
+    private String username;
+    private String email;
+    private String password;
+    private String phone;
     private Boolean enable;
-
+    private Date updated_at;
 }

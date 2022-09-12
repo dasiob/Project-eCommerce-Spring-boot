@@ -56,9 +56,6 @@ public class Account {
     @Column(name = "enable")
     private Boolean enable;
 
-    @Column(name = "locked")
-    private Boolean locked;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "account_id"),

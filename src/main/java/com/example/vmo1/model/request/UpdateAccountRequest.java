@@ -3,6 +3,7 @@ package com.example.vmo1.model.request;
 import lombok.Data;
 
 import javax.persistence.Id;
+import java.util.Date;
 
 @Data
 public class UpdateAccountRequest {
@@ -10,4 +11,5 @@ public class UpdateAccountRequest {
     private Long id;
     private String fullname;
     private String phone;
+    private Date updated_at;
 }

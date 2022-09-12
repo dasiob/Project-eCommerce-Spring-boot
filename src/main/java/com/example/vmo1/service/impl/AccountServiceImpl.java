@@ -14,6 +14,8 @@ import com.example.vmo1.repository.RoleRepository;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.validation.validator.EmailValidator;
+import com.example.vmo1.validation.validator.PhoneValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,18 +35,30 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private EmailValidator emailValidator;
     @Autowired
+    private PhoneValidator phoneValidator;
+    @Autowired
     private RoleRepository roleRepository;
 
     @Override
     public MessageResponse addAccountByAdmin(SignupRequest request) {
-        Account account = accountRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()).get();
-
-        if(account != null){
+        boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
+        boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
+        if(emailExists || usernameExists){
             return new MessageResponse("Fail: username or email already use");
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (isValidEmail) {
             Account accountRegister = new Account();
+
+            if (!StringUtils.isEmpty(request.getPhone())) {
+                boolean isValidPhone = phoneValidator.test(request.getPhone());
+                if (!isValidPhone) {
+                    return new MessageResponse("Phone number is not valid");
+                } else {
+                    accountRegister.setPhone(request.getPhone());
+                }
+            }
+            accountRegister.setFullname(request.getFullname());
             accountRegister.setUsername(request.getUsername());
             accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
             accountRegister.setEmail(request.getEmail());
@@ -53,15 +67,17 @@ public class AccountServiceImpl implements AccountService {
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.findByName("ROLE_USER").get());
             accountRegister.setRoles(roles);
+
+            accountRepository.save(accountRegister);
             return new MessageResponse("Success: Register successfully!");
         } else {
-            throw new IllegalStateException(String.format("Email %s, not valid", request.getEmail()));
+            return new MessageResponse("Fail: Email is not valid");
         }
     }
     @Override
     public MessageResponse updatePassword(CustomUserDetails customUserDetails, UpdatePasswordRequest updatePasswordRequest){
-        String email = customUserDetails.getEmail();
-        Account currentAccount = accountRepository.findByEmail(email).get();
+        Account currentAccount = accountRepository.findByEmail(customUserDetails.getEmail()).get();
+
         if(!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), currentAccount.getPassword())){
             return new MessageResponse("No matching account found");
         }
@@ -75,9 +91,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponse getAllAccount(int pageNo,int pageSize){
+    public AccountResponse getAllAccount(String name, int pageNo,int pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Account> accounts = accountRepository.findAll(pageable);
+        Page<Account> accounts = accountRepository.findByRoles_name(name, pageable);
 
         List<Account> accountList = accounts.getContent();
         List<AccountDto> content = accountList.stream().map(account -> MapperUtil.map(account, AccountDto.class)).collect(Collectors.toList());
@@ -96,8 +112,17 @@ public class AccountServiceImpl implements AccountService {
     public AccountInforResponse updateProfile(UpdateAccountRequest request, long id){
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Account", "Update account by id", id));
+
         account.setFullname(request.getFullname());
-        account.setPhone(request.getPhone());
+        if (!StringUtils.isEmpty(request.getPhone())) {
+            boolean isValidPhone = phoneValidator.test(request.getPhone());
+            if (!isValidPhone) {
+                throw new IllegalStateException("Phone number is not valid");
+            } else {
+                account.setPhone(request.getPhone());
+            }
+        }
+
         accountRepository.save(account);
         return MapperUtil.map(account, AccountInforResponse.class);
     }
@@ -106,6 +131,19 @@ public class AccountServiceImpl implements AccountService {
     public AccountInforResponse updateAccountByAdmin(UpdateAccountByAdminRequest request, long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Account", "Update account by id", id));
+
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        account.setFullname(request.getFullname());
+        account.setUsername(request.getUsername());
+        account.setEmail(request.getEmail());
+        if (!StringUtils.isEmpty(request.getPhone())) {
+            boolean isValidPhone = phoneValidator.test(request.getPhone());
+            if (!isValidPhone) {
+                throw new IllegalStateException("Phone number is not valid");
+            } else {
+                account.setPhone(request.getPhone());
+            }
+        }
         account.setEnable(request.getEnable());
         accountRepository.save(account);
         return MapperUtil.map(account, AccountInforResponse.class);

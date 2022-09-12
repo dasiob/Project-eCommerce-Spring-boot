@@ -77,51 +77,14 @@ public class ProductServiceImpl implements ProductService {
         // convert entity to dto
         return MapperUtil.map(product, ProductDto.class);
 
-
     }
     @Override
     public ProductDto updateProduct(ProductDto productDto, long id, MultipartFile[] files) {
         Product product = MapperUtil.map(productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Find product by id", "Product", id)), Product.class);
-
-        List<Image> lstImg = new ArrayList<>();
         imageRepository.deleteImagesByProduct(product.getId());
-        for (MultipartFile file : files) {
 
-            try {
-                String name = file.getOriginalFilename();
-                // random name generate file
-                String randomID = UUID.randomUUID().toString();
-                String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-                String filePath = path + File.separator + filename1;
-
-                File f = new File(path);
-                if (!f.exists()) {
-                    f.mkdir();
-                }
-                Files.copy(file.getInputStream(), Paths.get(filePath));
-                Image dbImage = new Image();
-
-                dbImage.setFileName(name);
-                dbImage.setProduct(product);
-                lstImg.add(dbImage);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-//                return new UploadFileResponse(null, "Image is not upload success");
-            }
-        }
-        imageRepository.saveAll(lstImg);
-        product.setLstImg(lstImg);
-
-//        product.setId(productDto.getId());
-//        product.setName(productDto.getName());
-//        product.setPrice(productDto.getPrice());
-//        product.setQuantity(productDto.getQuantity());
-//        product.setCategory(productDto.getCategory());
-
-        Product updateProduct = productRepository.save(product);
-        return MapperUtil.map(updateProduct, ProductDto.class);
+        return save(productDto, files);
     }
     @Override
     public ProductResponse getAllProduct(int pageNo, int pageSize){

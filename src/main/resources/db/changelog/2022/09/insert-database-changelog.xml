@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1662537496066-1" author="admin">
+<!--        insert admin-->
+        <insert tableName="account">
+            <column name="id" valueNumeric="1"/>
+            <column name="username" value="admin"/>
+            <column name="full_name" value="super admin"/>
+            <column name="email" value="admin@gmail.com"/>
+            <column name="phone" value="0372612247"/>
+            <column name="password" value="123456"/>
+            <column name="enable" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+
+        <insert tableName="account">
+            <column name="id" valueNumeric="2"/>
+            <column name="username" value="hue"/>
+            <column name="full_name" value="Nguyen Thi Hue"/>
+            <column name="email" value="nguyenhue11052001@gmail.com"/>
+            <column name="phone" value="0372612248"/>
+            <column name="password" value="123456"/>
+            <column name="enable" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <!--insert role-->
+        <insert tableName="role">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ROLE_USER"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+<!--        insert account role-->
+        <insert tableName="account_role">
+            <column name="account_id" valueNumeric="1"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+
+<!--        insert shop-->
+        <insert tableName="shop">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ghibli"/>
+            <column name="address" value="Ha noi"/>
+            <column name="account_id" value="2"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+        </insert>
+
+<!--        insert category-->
+        <insert tableName="category">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="phone"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="computer"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+<!--        insert size-->
+        <insert tableName="size">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="S"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <insert tableName="size">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="M"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <insert tableName="size">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="L"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+
+<!--        insert color-->
+        <insert tableName="color">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="black"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <insert tableName="color">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="white"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+        <insert tableName="color">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="gray"/>
+            <column name="status" valueBoolean="true"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+
+        <!--        insert product-->
+        <insert tableName="product">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="macbook air 2022"/>
+            <column name="price" valueNumeric="20000000"/>
+            <column name="quantity" valueNumeric="10"/>
+            <column name="category_id" valueNumeric="1"/>
+            <column name="shop_id" valueNumeric="1"/>
+            <column name="created_at" valueDate="2022-09-09"/>
+            <column name="updated_at" valueDate="2022-09-09"/>
+            <column name="is_deleted" valueBoolean="false"/>
+
+        </insert>
+
+        <!--        insert product size-->
+        <insert tableName="product_size">
+            <column name="product_id" valueNumeric="1"/>
+            <column name="size_id" valueNumeric="1"/>
+        </insert>
+
+        <!--        insert product color-->
+        <insert tableName="product_color">
+            <column name="product_id" valueNumeric="1"/>
+            <column name="color_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

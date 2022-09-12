@@ -35,7 +35,7 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = MapperUtil.map(shopDto, Shop.class);
         boolean isAccountExist = shopRepository.findByAccountId(shop.getAccount().getId()).isPresent();
         if(isAccountExist){
-            return new MessageResponse("Account adready use");
+            return new MessageResponse("Account already use");
         }
         try {
             String name = file.getOriginalFilename();
@@ -64,32 +64,10 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopDto update(ShopDto shopDto, long id, MultipartFile file) {
-        Shop shop = shopRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Find shop by id", "Shop", id));
-        try {
-            String name = file.getOriginalFilename();
-            // random name generate file
-            String randomID = UUID.randomUUID().toString();
-            String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
-            String filePath = path + File.separator + filename1;
+        Shop shop = MapperUtil.map(shopRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Find shop by id", "Shop", id)), Shop.class);
 
-            File f = new File(path);
-            if (!f.exists()) {
-                f.mkdir();
-            }
-            Files.copy(file.getInputStream(), Paths.get(filePath));
-            // save image to field banner in shop
-            shop.setBanner(name);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        shop.setId(shopDto.getId());
-        shop.setName(shopDto.getName());
-        shop.setAddress(shopDto.getAddress());
-
-        shopRepository.save(shop);
-        return MapperUtil.map(shop, ShopDto.class);
+        return MapperUtil.map(shopRepository.save(shop), ShopDto.class);
     }
 
     @Override

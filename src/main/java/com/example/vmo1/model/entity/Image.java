@@ -1,5 +1,6 @@
 package com.example.vmo1.model.entity;
 
+import com.example.vmo1.validation.annotation.ValidFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

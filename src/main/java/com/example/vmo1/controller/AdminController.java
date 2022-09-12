@@ -1,8 +1,10 @@
 package com.example.vmo1.controller;
 
 
+import com.example.vmo1.model.request.SignupRequest;
 import com.example.vmo1.model.request.UpdateAccountByAdminRequest;
 import com.example.vmo1.model.response.AccountInforResponse;
+import com.example.vmo1.model.response.MessageResponse;
 import com.example.vmo1.model.response.ShopResponse;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.service.ShopService;
@@ -18,10 +20,15 @@ public class AdminController {
     @Autowired
     private ShopService shopService;
 
+    @PostMapping("/addAccount")
+    public ResponseEntity<?> addAccountByAdmin(@RequestBody SignupRequest request){
+        return ResponseEntity.ok(accountService.addAccountByAdmin(request));
+    }
+
     @GetMapping("/account/all")
-    public ResponseEntity<?> getAllAccount(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+    public ResponseEntity<?> getAllAccount(@RequestParam(defaultValue = "ROLE_USER") String name, @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                                            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize){
-        return ResponseEntity.ok(accountService.getAllAccount(pageNo, pageSize));
+        return ResponseEntity.ok(accountService.getAllAccount(name, pageNo, pageSize));
     }
 
     @GetMapping("/shop/all")
@@ -39,6 +46,6 @@ public class AdminController {
     @DeleteMapping("/account/delete/{id}")
     public ResponseEntity<?> deleteAccountByAdmin(@PathVariable("id") long id){
         accountService.deleteAccountByAdmin(id);
-        return ResponseEntity.ok("Account have been delete!!!");
+        return ResponseEntity.ok(new MessageResponse("Account have been delete!!!"));
     }
 }
