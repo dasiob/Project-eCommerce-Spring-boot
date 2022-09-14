@@ -7,9 +7,6 @@ import java.util.Date;
 
 @Data
 public class UpdateAccountRequest {
-    @Id
-    private Long id;
     private String fullname;
     private String phone;
-    private Date updated_at;
 }

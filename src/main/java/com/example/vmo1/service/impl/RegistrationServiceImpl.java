@@ -74,12 +74,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             //Since, we are running the spring boot application in localhost, we are hardcoding the
             //url of the server. We are creating a POST request with token param
             String link = "http://localhost:8082/api/v1/auth/registration/confirm?token=" + tokenForNewAccount;
-            boolean isSuccess = emailSender.sendEmail(request.getEmail(), buildEmail(request.getUsername(), link));
-            if(isSuccess){
-                return new MessageResponse("Success: Token send successfully!");
-            } else {
-                return new MessageResponse("Fail: Can not send email");
-            }
+            emailSender.sendEmail(request.getEmail(), buildEmail(request.getUsername(), link));
+
+            return new MessageResponse("Success: Token send successfully!");
+
         } else {
             throw new IllegalStateException(String.format("Email %s, not valid", request.getEmail()));
         }

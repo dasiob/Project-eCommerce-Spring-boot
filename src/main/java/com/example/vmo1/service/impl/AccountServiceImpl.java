@@ -41,6 +41,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public MessageResponse addAccountByAdmin(SignupRequest request) {
+        Account accountRegister = MapperUtil.map(request, Account.class);
         boolean emailExists = accountRepository.findByEmail(request.getEmail()).isPresent();
         boolean usernameExists = accountRepository.findByUsername(request.getUsername()).isPresent();
         if(emailExists || usernameExists){
@@ -48,20 +49,13 @@ public class AccountServiceImpl implements AccountService {
         }
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (isValidEmail) {
-            Account accountRegister = new Account();
-
             if (!StringUtils.isEmpty(request.getPhone())) {
                 boolean isValidPhone = phoneValidator.test(request.getPhone());
                 if (!isValidPhone) {
                     return new MessageResponse("Phone number is not valid");
-                } else {
-                    accountRegister.setPhone(request.getPhone());
                 }
             }
-            accountRegister.setFullname(request.getFullname());
-            accountRegister.setUsername(request.getUsername());
             accountRegister.setPassword(passwordEncoder.encode(request.getPassword()));
-            accountRegister.setEmail(request.getEmail());
             accountRegister.setEnable(true);
 
             Set<Role> roles = new HashSet<>();
@@ -109,11 +103,11 @@ public class AccountServiceImpl implements AccountService {
         return accountResponse;
     }
     @Override
-    public AccountInforResponse updateProfile(UpdateAccountRequest request, long id){
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Account", "Update account by id", id));
+    public AccountInforResponse updateProfile(CustomUserDetails customUserDetails, UpdateAccountRequest request){
+        Account account = accountRepository.findByEmail(customUserDetails.getEmail()).get();
 
         account.setFullname(request.getFullname());
+
         if (!StringUtils.isEmpty(request.getPhone())) {
             boolean isValidPhone = phoneValidator.test(request.getPhone());
             if (!isValidPhone) {
@@ -154,6 +148,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Account", "Delete account by admin", id));
         account.setIs_deleted(true);
+
         accountRepository.save(account);
     }
 

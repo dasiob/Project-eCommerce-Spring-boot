@@ -23,7 +23,6 @@ public class ImageServiceImpl implements ImageService {
     public InputStream getResource(String path, String filename) throws FileNotFoundException {
         String fullPath = path + File.separator + filename;
         InputStream is = new FileInputStream(fullPath);
-
         return is;
     }
 

@@ -1,19 +1,15 @@
 package com.example.vmo1.controller;
 
-import com.example.vmo1.model.entity.Account;
 import com.example.vmo1.model.entity.RefreshToken;
 import com.example.vmo1.model.request.*;
 import com.example.vmo1.model.response.AccountInforResponse;
 import com.example.vmo1.model.response.JWTAuthResponse;
-import com.example.vmo1.model.response.TokenRefreshResponse;
-import com.example.vmo1.repository.AccountRepository;
 import com.example.vmo1.security.jwt.JwtTokenProvider;
 import com.example.vmo1.security.service.CustomUserDetails;
 import com.example.vmo1.service.AccountService;
 import com.example.vmo1.service.ForgotPasswordService;
 import com.example.vmo1.service.RefeshTokenService;
 import com.example.vmo1.service.RegistrationService;
-import com.example.vmo1.service.impl.ForgotPasswordServiceImpl;
 import com.example.vmo1.validation.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +31,6 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenProvider tokenProvider;
-    @Autowired
-   private AccountRepository accountRepository;
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -63,12 +57,12 @@ public class AuthController {
         refeshTokenService.verifyExpiration(refreshToken);
 
         String token = tokenProvider.generateTokenFromUsername(refreshToken.getAccount().getUsername());
-        return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+        return ResponseEntity.ok(new JWTAuthResponse(token, requestRefreshToken));
 
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> register(@RequestBody SignupRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest request) {
         return ResponseEntity.ok(registrationService.register(request));
     }
 
@@ -88,18 +82,18 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request){
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetRequest request){
         return ResponseEntity.ok(forgotPasswordService.changePassword(request));
     }
 
-    @PutMapping("/profile/update/{id}")
-    public ResponseEntity<?> updateProfile(@RequestBody UpdateAccountRequest updateAccountRequest, @PathVariable("id") long id){
-        AccountInforResponse accountResponse = accountService.updateProfile(updateAccountRequest, id);
+    @PutMapping("/profile-update")
+    public ResponseEntity<?> updateProfile(@CurrentUser CustomUserDetails customUserDetails, @RequestBody UpdateAccountRequest updateAccountRequest){
+        AccountInforResponse accountResponse = accountService.updateProfile(customUserDetails, updateAccountRequest);
         return new ResponseEntity<>(accountResponse, HttpStatus.OK);
     }
 
     @PutMapping("/password-update")
-    public ResponseEntity<?> updateAccountPassword(@CurrentUser CustomUserDetails customUserDetails, @RequestBody UpdatePasswordRequest updatePasswordRequest){
+    public ResponseEntity<?> updateAccountPassword(@CurrentUser CustomUserDetails customUserDetails,@Valid @RequestBody UpdatePasswordRequest updatePasswordRequest){
         return ResponseEntity.ok(accountService.updatePassword(customUserDetails, updatePasswordRequest));
     }
 }

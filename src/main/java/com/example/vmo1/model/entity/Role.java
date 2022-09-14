@@ -35,6 +35,10 @@ public class Role {
     @Column(name = "is_deleted")
     private Boolean is_deleted;
 
-
+    public Role(Integer id, String name, Boolean is_deleted) {
+        this.id = id;
+        this.name = name;
+        this.is_deleted = is_deleted;
+    }
 }
 

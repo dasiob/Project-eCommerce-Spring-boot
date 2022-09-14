@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -16,10 +17,13 @@ import java.util.List;
 public class ProductDto {
     @Id
     private long id;
+    @NotNull
     private String name;
+    @NotNull
     private float price;
+    @NotNull
     private int quantity;
     private Category category;
-    private List<Image> lstImg;
+    private List<ImageDto> lstImg;
     private Shop shop;
 }

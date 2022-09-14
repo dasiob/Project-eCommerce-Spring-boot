@@ -11,8 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountInforResponse {
-    @Id
-    private Long id;
+
     private String fullname;
     private String username;
     private String email;

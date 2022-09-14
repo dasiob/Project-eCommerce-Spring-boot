@@ -13,7 +13,7 @@
             <column name="full_name" value="super admin"/>
             <column name="email" value="admin@gmail.com"/>
             <column name="phone" value="0372612247"/>
-            <column name="password" value="123456"/>
+            <column name="password" value="$2a$10$O2dE3gJKomGIkGyUOpKd.uFc5gkPK/CoG6MpAEo0zqY4BncKqrIkW"/>
             <column name="enable" valueBoolean="true"/>
             <column name="created_at" valueDate="2022-09-09"/>
             <column name="updated_at" valueDate="2022-09-09"/>
@@ -26,7 +26,7 @@
             <column name="full_name" value="Nguyen Thi Hue"/>
             <column name="email" value="nguyenhue11052001@gmail.com"/>
             <column name="phone" value="0372612248"/>
-            <column name="password" value="123456"/>
+            <column name="password" value="$2a$10$O2dE3gJKomGIkGyUOpKd.uFc5gkPK/CoG6MpAEo0zqY4BncKqrIkW"/>
             <column name="enable" valueBoolean="true"/>
             <column name="created_at" valueDate="2022-09-09"/>
             <column name="updated_at" valueDate="2022-09-09"/>

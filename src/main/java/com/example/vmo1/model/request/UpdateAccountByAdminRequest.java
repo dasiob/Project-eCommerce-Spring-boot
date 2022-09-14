@@ -11,13 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccountByAdminRequest {
-    @Id
-    private Long id;
+
     private String fullname;
     private String username;
     private String email;
     private String password;
     private String phone;
     private Boolean enable;
-    private Date updated_at;
 }

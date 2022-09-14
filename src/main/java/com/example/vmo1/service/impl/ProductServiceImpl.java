@@ -44,7 +44,6 @@ public class ProductServiceImpl implements ProductService {
         Product productRequest = MapperUtil.map(productDto, Product.class);
 
         List<Image> lstImg = new ArrayList<>();
-//        String filename = null;
         for (MultipartFile file : files) {
             try {
                 String name = file.getOriginalFilename();

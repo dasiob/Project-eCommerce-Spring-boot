@@ -13,7 +13,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
-public class AuthControllerAdvice {
+public class
+AuthControllerAdvice {
     private String resolvePathFromWebRequest(WebRequest request) {
         try {
             return ((ServletWebRequest) request).getRequest().getAttribute("javax.servlet.forward.request_uri").toString();

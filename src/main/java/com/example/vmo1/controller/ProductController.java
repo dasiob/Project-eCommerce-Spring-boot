@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -35,7 +36,7 @@ public class ProductController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> uploadMultipleFiles(@Validated @ValidFile @RequestPart("files") MultipartFile[] files, @RequestPart ProductDto productDto) {
+    public ResponseEntity<?> uploadMultipleFiles(@Validated @ValidFile @RequestPart("files") MultipartFile[] files,@Valid @RequestPart ProductDto productDto) {
         return ResponseEntity.ok(productService.save(productDto, files));
     }
 

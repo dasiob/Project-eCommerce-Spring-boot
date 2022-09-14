@@ -10,7 +10,7 @@ public class FileValidator implements ConstraintValidator<ValidFile, MultipartFi
 
     @Override
     public void initialize(ValidFile constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
+
     }
 
     @Override
